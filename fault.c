@@ -1,7 +1,7 @@
 #include <ch.h>
 #include <stdint.h>
 
-#if (__CORTEX_M != 0x00 && __CORTEX_M != 0x03 && __CORTEX_M != 0x04)
+#if (__CORTEX_M != 0x00 && __CORTEX_M != 0x03 && __CORTEX_M != 0x04 && __CORTEX_M != 0x07)
 #error "__CORTEX_M version not supported"
 #endif
 
@@ -111,7 +111,7 @@ static const char *fault_name(void)
 {
 #if (__CORTEX_M == 0x00)
     return "HardFault";
-#elif (__CORTEX_M == 0x03 || __CORTEX_M == 0x04)
+#elif (__CORTEX_M == 0x03 || __CORTEX_M == 0x04 || __CORTEX_M == 0x07)
     static const char *faults[] = {"HardFault", "MemManageFault", "BusFault", "UsageFault"};
     uint32_t isr = __get_IPSR();
     if (isr >= 3 && isr <= 6) {
@@ -167,7 +167,7 @@ void fault_handler(struct arm_soft_frame *soft_frame, void *msp, void *psp)
 #endif
 
     // detailed debug info
-#if (__CORTEX_M == 0x03 || __CORTEX_M == 0x04)
+#if (__CORTEX_M == 0x03 || __CORTEX_M == 0x04 || __CORTEX_M != 0x07)
     uint16_t UFSR = (SCB->CFSR >> 16) & 0xffff;
     uint8_t BFSR = (SCB->CFSR >> 8) & 0xff;
     uint8_t MMFSR = (SCB->CFSR) & 0xff;
